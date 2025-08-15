@@ -3,18 +3,17 @@ require("dotenv").config();
 
 // express package is used to set up express web APIS
 const express = require("express")
-// const mongoose = require("mongoose"); // uncomment this line for lesson 3 of express
-// const itemModel = require("./models/items"); // uncomment this line for lesson 3 of express
+const mongoose = require("mongoose"); 
+const itemModel = require("./models/items"); 
 // cors package is used to handle cross origin requests to the API server
 const cors = require("cors");
 // You need to set up a port that your express application will run on
 const PORT = process.env.PORT || 3500;
-// const dbURL = process.env.dbURL; // uncomment this line for lesson 3 of express
+const dbURL = process.env.dbURL; 
 
-// uncomment the following 3 lines for lesson 3 of express
-// mongoose.connect(dbURL)
-// .then(() => console.log("Connected to MongoDB"))
-// .catch((err) => console.error(err.message))
+mongoose.connect(dbURL)
+.then(() => console.log("Connected to MongoDB"))
+.catch((err) => console.error(err.message))
 
 const app = express();
 

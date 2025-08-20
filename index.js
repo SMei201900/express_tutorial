@@ -40,8 +40,21 @@ app.get("/items/", async(req, res) => {
 
 // HTTP POST Endpoint on /items route
 app.post("/items/", async(req, res) => {
-    res.status(201).json({ message: "Item created successfully", item: req.body });
+    try {
+        //this line uses ItemModel to create a new item in the database; see items.sj for it 
+        const newItem = new itemModel(req.body);
+        //this line saves the new item in the database 
+        const savedItem = await newItem.save();
+        //here we are sending the savedItem to client in the response if there are NO errors 
+        res.status(201).json(savedItem); 
+    }catch (error) {
+        res.status(500).json( {error: error.message}); 
+    }
 });
+
+
+
+
 
 // HTTP PUT Endpoint on /items/:id route
 app.put("/items/:id", async(req, res) => {

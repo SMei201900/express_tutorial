@@ -15,4 +15,4 @@ const itemSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 const itemModel = mongoose.model("Item", itemSchema);
-module.exports = itemModel
+module.exports = { itemModel } /*adding curly brackets let Insonmia work*/

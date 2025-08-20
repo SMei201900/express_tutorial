@@ -34,8 +34,14 @@ app.get("/", (req, res) => {
 
 // HTTP GET Endpoint on /items route
 app.get("/items/", async(req, res) => {
-    const message = ["Sponge", "Fries", "Cool Whip"];
-    res.status(200).json({ "message": message });
+    try {
+        //finding all the items in the database
+        const items =  await itemModel.find(); //in find() a query can be placed in here 
+        //and then we send the list of items to the client that requested this endpoint 
+        res.status(200).json(items); 
+    } catch (error) {
+        res.status(500).json( {error: error.message}); 
+    }
 });
 
 // HTTP POST Endpoint on /items route

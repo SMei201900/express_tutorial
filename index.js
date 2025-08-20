@@ -53,9 +53,6 @@ app.post("/items/", async(req, res) => {
 });
 
 
-
-
-
 // HTTP PUT Endpoint on /items/:id route
 app.put("/items/:id", async(req, res) => {
     const itemId = req.params.id;

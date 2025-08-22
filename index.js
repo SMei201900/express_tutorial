@@ -52,23 +52,46 @@ app.post("/items/", async(req, res) => {
         //this line saves the new item in the database 
         const savedItem = await newItem.save();
         //here we are sending the savedItem to client in the response if there are NO errors 
-        res.status(201).json(savedItem); 
+        res.status(201).json(savedItem); //status code 201 indicates a new Item has been made 
     }catch (error) {
         res.status(500).json( {error: error.message}); 
     }
 });
 
-
 // HTTP PUT Endpoint on /items/:id route
 app.put("/items/:id", async(req, res) => {
-    const itemId = req.params.id;
-    const newItem = req.body;
-    res.status(200).json({ message: "Item updated successfully", itemId, "item": newItem });
+	try {
+    	// this itemId variable retrieved the dynamic id from the URL parameters
+    	const itemId = req.params.id;
+    	// this line will attempt to find an item by its id and update it in the database
+    	const updatedItem = await itemModel.findByIdAndUpdate(itemId, req.body, { new: true });
+    	// If the item is not found, this block of code will execute a 404 error with a not found message
+    	if (!updatedItem){
+        	res.status(404).json({ error: "Item not found" });
+    	}
+    	// If there are no errors, then we can return the updated item to the client
+    	res.status(200).json(updatedItem);
+	} catch (error) {
+    	res.status(500).json({ error: error.message });
+	}
 });
 
 // HTTP DELETE Endpoint on /items/:id route
 app.delete("/items/:id", async(req, res) => {
-    res.status(200).json({ message: "Item deleted successfully", itemId: req.params.id });
+	try {
+    	// itemId variable retrieves the dynamic id from the URL parameters
+    	const itemId = req.params.id;
+    	// this line will attempt to find an item by its id and delete it from the database
+    	const deletedItem = await itemModel.findByIdAndDelete(itemId);
+    	// checks if an item was removed from the database, if it was NOT, then we will execute a 404 not found error
+    	if (!deletedItem){
+        	return res.status(404).json({ error: "Item not found" });
+    	}
+    	// If there are no errors, we let the client know that the item was deleted
+    	res.status(200).json({ message: "Item deleted successfully" });
+	} catch (error) {
+    	res.status(500).json({ error: error.message });
+	}
 });
 
 app.listen(PORT, () => {
